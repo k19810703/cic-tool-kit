@@ -1,5 +1,6 @@
 {
   "name": "@cic-digital/cic-tool-kit",
+  "preferGlobal": true,
   "version": "0.0.2",
   "description": "tool kit",
   "bin": {

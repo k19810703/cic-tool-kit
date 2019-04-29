@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 require('log-node')();
 
 const program = require('commander');
