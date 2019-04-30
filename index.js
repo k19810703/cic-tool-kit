@@ -9,6 +9,7 @@ const pkg = require('./package.json');
 const { routegen } = require('./routegen');
 const { checkgot } = require('./checkgot');
 const { editpostman } = require('./editpostman');
+const { getPaySlip } = require('./payslip');
 
 const { log } = console;
 
@@ -24,6 +25,23 @@ program
   .action((cmd) => {
     validCommand = true;
     routegen(cmd.swagger, cmd.output);
+  });
+
+program
+  .command('payslip')
+  .option('-u, --w3id [w3 id]', 'Specify your intranet id')
+  .option('-p, --password [password]', 'Specify your password')
+  .action(async (cmd) => {
+    validCommand = true;
+    if (!cmd.w3id) {
+      log(chalk.red('please specify input by -u'));
+      process.exit(1);
+    }
+    if (!cmd.password) {
+      log(chalk.red('please specify output by -p'));
+      process.exit(1);
+    }
+    await getPaySlip(cmd.w3id, cmd.password);
   });
 
 program
