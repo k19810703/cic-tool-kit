@@ -15,3 +15,9 @@ postman的请求中如果有上传文件的部分，在导出的json文件里会
 ```
 ctk editpostman --input=inputfile.json --output=outputfile.json
 ```
+
+##  下载最新的工资单
+首先你得在ibm内网，能访问workday
+```
+ctk payslpi -u yourIntranetId -p yourPassword
+```
