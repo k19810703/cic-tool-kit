@@ -41,7 +41,8 @@ program
       log(chalk.red('please specify output by -p'));
       process.exit(1);
     }
-    await getPaySlip(cmd.w3id, cmd.password);
+    getPaySlip(cmd.w3id, cmd.password)
+      .catch(() => log(chalk.red('出错咧')));
   });
 
 program

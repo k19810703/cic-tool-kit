@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
+const open = require('open');
 
 const { log } = console;
 
@@ -29,7 +30,7 @@ async function getOTP() {
 }
 
 async function getPaySlip(userid, password) {
-  log(chalk.green('w3贼慢，耐心等待'));
+  log(chalk.green('w3贼慢，请耐心等待'));
   const browser = await puppeteer.launch(
     {
       headless: false,
@@ -50,6 +51,17 @@ async function getPaySlip(userid, password) {
   const loginXpath = '//*[@id="btn_signin"]';
   await (await page.$x(loginXpath))[0].click();
   log(chalk.green(`登录${userid}`));
+  const appearedelement = await Promise.race([
+    page.waitForXPath('//*[@id="errorDiv"]/p'),
+    page.waitForXPath('//*[@data-automation-id="tdWidget"]/div[2]/button'),
+  ]);
+  const errormessage = await appearedelement.$x('//*[@id="errorDiv"]/p');
+  if (errormessage.length > 0) {
+    log(chalk.red('老哥，用户名或密码不对。'));
+    await browser.close();
+    process.exit(1);
+  }
+  log(chalk.green('欧了,接下来会再workday一顿操作，比较慢'));
   await click(page, '//*[@data-automation-id="tdWidget"]/div[2]/button');
   await click(page, '//*/button[@data-automation-id="Current_User"]');
   await click(page, '//*/div[@data-automation-id="hammy_profile_link"]');
@@ -59,7 +71,7 @@ async function getPaySlip(userid, password) {
   log(chalk.green('打开工资单页面'));
   await page.goto('https://ibm.biz/payslipLite');
   await click(page, '//*[@id="page-content-wrapper"]/div/div/table/tbody[2]/tr[1]/td[2]/a');
-  log(chalk.green('openning latest entry'));
+  log(chalk.green('打开最近一个工资单'));
   await page.setRequestInterception(true);
   page.on('requestfinished', async (request) => {
     const requesturl = request.url();
@@ -69,6 +81,7 @@ async function getPaySlip(userid, password) {
       await browser.close();
       fs.writeFile('payslip.pdf', data, (err) => {
         if (err) throw err;
+        open('payslip.pdf');
         log(chalk.green('工资单保存=>payslip.pdf'));
       });
     }
