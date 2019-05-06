@@ -33,7 +33,7 @@ async function getPaySlip(userid, password) {
   log(chalk.green('w3贼慢，请耐心等待'));
   const browser = await puppeteer.launch(
     {
-      headless: true,
+      headless: false,
       ignoreHTTPSErrors: true,
       args: [
         '--start-maximized',
