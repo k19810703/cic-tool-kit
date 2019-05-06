@@ -3,6 +3,7 @@ const fs = require('fs');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 const open = require('open');
+const ProgressBar = require('progress');
 
 const { log } = console;
 
@@ -50,7 +51,7 @@ async function getPaySlip(userid, password) {
   await (await page.$x(passWordXpath))[0].type(password);
   const loginXpath = '//*[@id="btn_signin"]';
   await (await page.$x(loginXpath))[0].click();
-  log(chalk.green(`登录${userid}`));
+  // log(chalk.green(`登录${userid}`));
   const appearedelement = await Promise.race([
     page.waitForXPath('//*[@id="errorDiv"]/p'),
     page.waitForXPath('//*[@data-automation-id="tdWidget"]/div[2]/button'),
@@ -61,7 +62,24 @@ async function getPaySlip(userid, password) {
     await browser.close();
     process.exit(1);
   }
+  const appearedelement2 = await Promise.race([
+    page.waitForXPath('//*[@id="emailOTP"]'),
+    page.waitForXPath('//*[@data-automation-id="tdWidget"]/div[2]/button'),
+  ]);
+  const otpinput = await appearedelement2.$x('//*[@id="emailOTP"]');
+  if (otpinput.length > 0) {
+    log(chalk.green('似乎需要one time password'));
+    click(page, '//*[@id="emailOTP"]');
+    log(chalk.green('passcode会发送到你邮箱，注意查收'));
+    const passcode = await getOTP();
+    const inputOTPXpath = '//*[@id="otppswd"]';
+    await page.waitForXPath(inputOTPXpath);
+    await (await page.$x(inputOTPXpath))[0].type(passcode);
+    click(page, '//*[@id="btn_submit"]');
+  }
+
   log(chalk.green('欧了,接下来会再workday一顿操作，比较慢'));
+
   await click(page, '//*[@data-automation-id="tdWidget"]/div[2]/button');
   await click(page, '//*/button[@data-automation-id="Current_User"]');
   await click(page, '//*/div[@data-automation-id="hammy_profile_link"]');
@@ -81,8 +99,8 @@ async function getPaySlip(userid, password) {
       await browser.close();
       fs.writeFile('payslip.pdf', data, (err) => {
         if (err) throw err;
+        log(chalk.green('工资单保存=>payslip.pdf,正在为您打开'));
         open('payslip.pdf');
-        log(chalk.green('工资单保存=>payslip.pdf'));
       });
     }
   });
