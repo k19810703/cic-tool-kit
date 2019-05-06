@@ -17,7 +17,7 @@ ctk editpostman --input=inputfile.json --output=outputfile.json
 ```
 
 ##  下载最新的工资单
-首先你得在ibm内网，能访问workday
+首先你得在ibm内网，能访问workday,第一次使用可能会需要email验证
 ```
-ctk payslpi -u yourIntranetId -p yourPassword
+ctk payslip -u yourIntranetId -p yourPassword
 ```
