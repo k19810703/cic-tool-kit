@@ -21,3 +21,8 @@ ctk editpostman --input=inputfile.json --output=outputfile.json
 ```
 ctk payslip -u yourIntranetId -p yourPassword
 ```
+
+##  比较图片
+```
+ctk comparePic -a 图片1 -b 图片2 -o 比较结果图片
+```

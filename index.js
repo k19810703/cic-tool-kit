@@ -10,6 +10,7 @@ const { routegen } = require('./routegen');
 const { checkgot } = require('./checkgot');
 const { editpostman } = require('./editpostman');
 const { getPaySlip } = require('./payslip');
+const { getPicDiff } = require('./comparePic');
 
 const { log } = console;
 
@@ -42,6 +43,29 @@ program
       process.exit(1);
     }
     getPaySlip(cmd.w3id, cmd.password)
+      .catch(() => log(chalk.red('出错咧')));
+  });
+
+program
+  .command('comparePic')
+  .option('-a, --pica [picturea]', 'Specify one of your pictures to be compared')
+  .option('-b, --picb [pictureb]', 'Specify the other picture to be compared')
+  .option('-o, --output [output file]', 'compare result')
+  .action(async (cmd) => {
+    validCommand = true;
+    if (!cmd.pica) {
+      log(chalk.red('please specify your picture by -a'));
+      process.exit(1);
+    }
+    if (!cmd.picb) {
+      log(chalk.red('please specify your picture by -b'));
+      process.exit(1);
+    }
+    if (!cmd.output) {
+      log(chalk.red('please specify output picture by -o'));
+      process.exit(1);
+    }
+    getPicDiff(cmd.pica, cmd.picb, cmd.output)
       .catch(() => log(chalk.red('出错咧')));
   });
 
