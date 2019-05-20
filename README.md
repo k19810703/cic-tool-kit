@@ -26,3 +26,19 @@ ctk payslip -u yourIntranetId -p yourPassword
 ```
 ctk comparePic -a 图片1 -b 图片2 -o 比较结果图片
 ```
+
+## 自动输入密码
+先保存好你的密码
+```
+ctk updateparam -k pass -d {yourpassword}
+```
+
+需要输的时候
+```
+ctk type -k pass
+```
+
+列出保存好的密码
+```
+ctk listparam
+```

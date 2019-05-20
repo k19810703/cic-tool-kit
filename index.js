@@ -11,6 +11,11 @@ const { checkgot } = require('./checkgot');
 const { editpostman } = require('./editpostman');
 const { getPaySlip } = require('./payslip');
 const { getPicDiff } = require('./comparePic');
+const {
+  listParams,
+  updateParam,
+  typeParam,
+} = require('./robotfunc');
 
 const { log } = console;
 
@@ -26,6 +31,45 @@ program
   .action((cmd) => {
     validCommand = true;
     routegen(cmd.swagger, cmd.output);
+  });
+
+program
+  .command('listparam')
+  .action(async () => {
+    validCommand = true;
+    listParams()
+      .catch(() => log(chalk.red('出错咧')));
+  });
+
+program
+  .command('updateparam')
+  .option('-k, --key [key]', 'Specify your param name')
+  .option('-d, --value [value]', 'Specify your param value')
+  .action(async (cmd) => {
+    validCommand = true;
+    if (!cmd.key || typeof cmd.key !== 'string') {
+      log(chalk.red('please specify key by -k'));
+      process.exit(1);
+    }
+    if (!cmd.value) {
+      log(chalk.red('please specify value by -d'));
+      process.exit(1);
+    }
+    updateParam(cmd.key, cmd.value)
+      .catch(() => log(chalk.red('出错咧')));
+  });
+
+program
+  .command('type')
+  .option('-k, --key [key]', 'Specify your param to be typed')
+  .action(async (cmd) => {
+    validCommand = true;
+    if (!cmd.key || typeof cmd.key !== 'string') {
+      log(chalk.red('please specify key by -k'));
+      process.exit(1);
+    }
+    typeParam(cmd.key)
+      .catch(() => log(chalk.red('出错咧')));
   });
 
 program
