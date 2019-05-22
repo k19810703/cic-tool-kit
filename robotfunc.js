@@ -43,7 +43,7 @@ async function typeParam(key) {
       robot.typeString(params[key]);
     }, 2000);
   }
-};
+}
 
 module.exports.typeParam = typeParam;
 module.exports.listParams = listParams;

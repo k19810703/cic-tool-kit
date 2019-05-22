@@ -7,7 +7,6 @@ const chalk = require('chalk');
 
 const pkg = require('./package.json');
 const { routegen } = require('./routegen');
-const { checkgot } = require('./checkgot');
 const { editpostman } = require('./editpostman');
 const { getPaySlip } = require('./payslip');
 const { getPicDiff } = require('./comparePic');
@@ -130,12 +129,6 @@ program
     editpostman(cmd.input, cmd.output);
   });
 
-program
-  .command('checkgot')
-  .action(() => {
-    validCommand = true;
-    checkgot();
-  });
 function displayUsage() {
   process.exit(1);
 }
