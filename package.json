@@ -21,6 +21,7 @@
     "active-window": "^0.1.0",
     "chalk": "^2.4.2",
     "commander": "^2.20.0",
+    "delay": "^4.2.0",
     "emailjs": "^2.2.0",
     "inquirer": "^6.3.1",
     "jsonfile": "^5.0.0",
