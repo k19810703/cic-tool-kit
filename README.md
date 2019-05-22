@@ -38,7 +38,7 @@ ctk type -k pass
 ctk listparam
 ```
 
-##  打开并登录ILC
+##  打开并登录ILC，在最新的一周的第一行的周一到周五填上8提交
 ```
 ctk ilc
 ```
