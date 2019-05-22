@@ -15,6 +15,7 @@ const {
   updateParam,
   typeParam,
 } = require('./robotfunc');
+const { openilc } = require('./openilc');
 
 const { log } = console;
 
@@ -37,6 +38,14 @@ program
   .action(async () => {
     validCommand = true;
     listParams()
+      .catch(() => log(chalk.red('出错咧')));
+  });
+
+program
+  .command('ilc')
+  .action(async () => {
+    validCommand = true;
+    openilc()
       .catch(() => log(chalk.red('出错咧')));
   });
 

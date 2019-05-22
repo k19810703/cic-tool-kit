@@ -37,3 +37,8 @@ ctk type -k pass
 ```
 ctk listparam
 ```
+
+##  打开并登录ILC
+```
+ctk ilc
+```

@@ -45,6 +45,8 @@ async function typeParam(key) {
   }
 }
 
+module.exports.paramfile = paramfile;
+module.exports.preProcess = preProcess;
 module.exports.typeParam = typeParam;
 module.exports.listParams = listParams;
 module.exports.updateParam = updateParam;
