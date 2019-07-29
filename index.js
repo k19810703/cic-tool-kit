@@ -46,7 +46,9 @@ program
   .action(async () => {
     validCommand = true;
     openilc()
-      .catch(() => log(chalk.red('出错咧')));
+      .catch(() => {
+        log(chalk.red('出错咧'));
+      });
   });
 
 program

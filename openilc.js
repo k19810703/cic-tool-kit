@@ -8,6 +8,7 @@ const os = require('os');
 const delay = require('delay');
 
 const { preProcess, paramfile, updateParam } = require('./robotfunc');
+const { getCurrentTitle } = require('./util/util');
 
 const { log } = console;
 
@@ -36,9 +37,20 @@ async function openilc() {
     params.ilcpass = await getPass();
     await updateParam('ilcpass', params.ilcpass);
   }
-  log(chalk.green('打开ILC，8秒后输入密码'));
+  log(chalk.green('打开ILC'));
   await open('/Applications/ILC.app');
-  await delay(8000);
+  let crtTitle = '';
+  let retry = 0;
+  while (crtTitle !== 'Login') {
+    await delay(1000);
+    crtTitle = await getCurrentTitle();
+    retry += 1;
+    if (retry > 1) {
+      throw new Error('未能等到ilc窗口出现');
+    }
+  }
+  log(chalk.green('发现ilc窗口'));
+
   robot.typeString(params.ilcpass);
   robot.keyTap('enter');
   await delay(8000);
