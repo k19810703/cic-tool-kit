@@ -1,7 +1,7 @@
 {
   "name": "@cic-digital/cic-tool-kit",
   "preferGlobal": true,
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "tool kit",
   "bin": {
     "ctk": "./index.js"
