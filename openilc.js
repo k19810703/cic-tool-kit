@@ -6,9 +6,10 @@ const jsonfile = require('jsonfile');
 const chalk = require('chalk');
 const os = require('os');
 const delay = require('delay');
+const osxQuit = require('osx-quit');
 
 const { preProcess, paramfile, updateParam } = require('./robotfunc');
-const { getCurrentTitle } = require('./util/util');
+const { waitForTitle } = require('./util/util');
 
 const { log } = console;
 
@@ -30,6 +31,7 @@ async function openilc() {
     process.exit(0);
   }
   log(chalk.green('处理开始，请勿移动鼠标和操作键盘'));
+  await osxQuit('ILC');
   await preProcess();
   const params = jsonfile.readFileSync(paramfile);
   if (!params.ilcpass) {
@@ -39,21 +41,12 @@ async function openilc() {
   }
   log(chalk.green('打开ILC'));
   await open('/Applications/ILC.app');
-  let crtTitle = '';
-  let retry = 0;
-  while (crtTitle !== 'Login') {
-    await delay(1000);
-    crtTitle = await getCurrentTitle();
-    retry += 1;
-    if (retry > 20) {
-      throw new Error('未能等到ilc窗口出现');
-    }
-  }
+  await waitForTitle('Login');
   log(chalk.green('发现ilc窗口'));
 
   robot.typeString(params.ilcpass);
   robot.keyTap('enter');
-  await delay(8000);
+  await waitForTitle('Intranet');
   for (let i = 0; i < 20; i += 1) {
     robot.keyTap('tab');
     await delay(500);

@@ -48,7 +48,7 @@ program
     openilc()
       .catch((error) => {
         log(chalk.red('出错咧'));
-        console.error(error);
+        log(error);
       });
   });
 

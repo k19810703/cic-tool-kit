@@ -1,5 +1,8 @@
+/* eslint-disable no-await-in-loop */
+
 const fs = require('fs');
 const activeWin = require('active-win');
+const delay = require('delay');
 
 // const { log } = require('./log');
 
@@ -23,5 +26,22 @@ async function getCurrentTitle() {
   return crtTitle;
 }
 
+async function waitForTitle(title, max) {
+  let crtTitle = '';
+  const maxtry = 20 || max;
+  let retry = 1;
+  while (crtTitle.indexOf(title) < 0) {
+    await delay(1000);
+    crtTitle = await getCurrentTitle();
+    crtTitle = crtTitle || '';
+    retry += 1;
+    if (retry > maxtry) {
+      throw new Error('未能等到ilc窗口出现');
+    }
+  }
+  await delay(1000);
+}
+
 module.exports.readJsonFile = readJsonFile;
 module.exports.getCurrentTitle = getCurrentTitle;
+module.exports.waitForTitle = waitForTitle;
