@@ -45,7 +45,7 @@ async function openilc() {
     await delay(1000);
     crtTitle = await getCurrentTitle();
     retry += 1;
-    if (retry > 1) {
+    if (retry > 20) {
       throw new Error('未能等到ilc窗口出现');
     }
   }

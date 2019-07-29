@@ -15,7 +15,6 @@ function readJsonFile(filepath) {
 async function getCurrentTitle() {
   const crtWin = await activeWin();
   let crtTitle = '';
-  console.log(crtWin);
   if (crtWin) {
     crtTitle = crtWin.title;
   } else {
