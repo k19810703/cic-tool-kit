@@ -3,7 +3,10 @@ const fs = require('fs');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 const open = require('open');
-const ProgressBar = require('progress');
+const jsonfile = require('jsonfile');
+// const ProgressBar = require('progress');
+
+const { paramfile } = require('./robotfunc');
 
 const { log } = console;
 
@@ -30,7 +33,18 @@ async function getOTP() {
   return answers.otp;
 }
 
-async function getPaySlip(userid, password) {
+async function getPaySlip() {
+  const params = jsonfile.readFileSync(paramfile);
+  if (!params.w3id) {
+    log(chalk.red('w3id未设置。请用[updateparam -k w3id -d <your w3id>]来设置'));
+    process.exit(1);
+  }
+  if (!params.pass) {
+    log(chalk.red('w3id密码未设置。请用[updateparam -k pass -d <your w3id password>]来设置'));
+    process.exit(1);
+  }
+  const userid = params.w3id;
+  const password = params.pass;
   log(chalk.green('w3贼慢，请耐心等待'));
   const browser = await puppeteer.launch(
     {
@@ -52,8 +66,11 @@ async function getPaySlip(userid, password) {
   const loginXpath = '//*[@id="btn_signin"]';
   await (await page.$x(loginXpath))[0].click();
   // log(chalk.green(`登录${userid}`));
+  log('出现OTP画面或者登陆成功');
+  // 等待 密码错 OTP 登陆成功 出现
   const appearedelement = await Promise.race([
     page.waitForXPath('//*[@id="errorDiv"]/p'),
+    page.waitForXPath('//*[@id="emailOTP"]'),
     page.waitForXPath('//*[@data-automation-id="tdWidget"]/div[2]/button'),
   ]);
   const errormessage = await appearedelement.$x('//*[@id="errorDiv"]/p');
@@ -62,11 +79,11 @@ async function getPaySlip(userid, password) {
     await browser.close();
     process.exit(1);
   }
-  const appearedelement2 = await Promise.race([
-    page.waitForXPath('//*[@id="emailOTP"]'),
-    page.waitForXPath('//*[@data-automation-id="tdWidget"]/div[2]/button'),
-  ]);
-  const otpinput = await appearedelement2.$x('//*[@id="emailOTP"]');
+  // const appearedelement2 = await Promise.race([
+  //   page.waitForXPath('//*[@id="emailOTP"]'),
+  //   page.waitForXPath('//*[@data-automation-id="tdWidget"]/div[2]/button'),
+  // ]);
+  const otpinput = await appearedelement.$x('//*[@id="emailOTP"]');
   if (otpinput.length > 0) {
     log(chalk.green('似乎需要one time password'));
     click(page, '//*[@id="emailOTP"]');
@@ -79,7 +96,6 @@ async function getPaySlip(userid, password) {
   }
 
   log(chalk.green('欧了,接下来会再workday一顿操作，比较慢'));
-
   await click(page, '//*[@data-automation-id="tdWidget"]/div[2]/button');
   await click(page, '//*/button[@data-automation-id="Current_User"]');
   await click(page, '//*/div[@data-automation-id="hammy_profile_link"]');

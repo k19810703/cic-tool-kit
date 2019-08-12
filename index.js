@@ -85,19 +85,9 @@ program
 
 program
   .command('payslip')
-  .option('-u, --w3id [w3 id]', 'Specify your intranet id')
-  .option('-p, --password [password]', 'Specify your password')
-  .action(async (cmd) => {
+  .action(async () => {
     validCommand = true;
-    if (!cmd.w3id) {
-      log(chalk.red('please specify input by -u'));
-      process.exit(1);
-    }
-    if (!cmd.password) {
-      log(chalk.red('please specify output by -p'));
-      process.exit(1);
-    }
-    getPaySlip(cmd.w3id, cmd.password)
+    getPaySlip()
       .catch(() => log(chalk.red('出错咧')));
   });
 
