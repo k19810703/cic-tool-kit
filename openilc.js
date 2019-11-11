@@ -41,12 +41,12 @@ async function openilc() {
   }
   log(chalk.green('打开ILC'));
   await open('/Applications/ILC.app');
-  await waitForTitle('Login');
+  await waitForTitle('Intranet Labor Claiming');
   log(chalk.green('发现ilc窗口'));
 
   robot.typeString(params.ilcpass);
   robot.keyTap('enter');
-  await waitForTitle('Intranet');
+  await delay(8000);
   for (let i = 0; i < 20; i += 1) {
     robot.keyTap('tab');
     await delay(500);

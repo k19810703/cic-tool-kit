@@ -19,7 +19,9 @@ async function getCurrentTitle() {
   const crtWin = await activeWin();
   let crtTitle = '';
   if (crtWin) {
-    crtTitle = crtWin.title;
+    console.log(JSON.stringify(crtWin));
+    console.log(crtWin.owner.name);
+    crtTitle = crtWin.owner.name;
   } else {
     crtTitle = '';
   }
@@ -30,9 +32,12 @@ async function waitForTitle(title, max) {
   let crtTitle = '';
   const maxtry = 20 || max;
   let retry = 1;
+  console.log(`wait for ${title}`)
   while (crtTitle.indexOf(title) < 0) {
     await delay(1000);
     crtTitle = await getCurrentTitle();
+    console.log(`got title ${crtTitle}`)
+
     crtTitle = crtTitle || '';
     retry += 1;
     if (retry > maxtry) {
