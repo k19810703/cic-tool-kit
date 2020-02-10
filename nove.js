@@ -33,7 +33,7 @@ const launchConfig = {
 };
 
 async function submitNove(username, pass) {
-  console.log(username, pass);
+  // console.log(username, pass);
   const browser = await puppeteer.launch(launchConfig);
   const page = await browser.newPage();
   await page.goto('https://studio7.dalian.cn.ibm.com:9090/web/');
