@@ -16,6 +16,7 @@ const {
   typeParam,
 } = require('./robotfunc');
 const { openilc } = require('./openilc');
+const { submitNove } = require('./nove');
 
 const { log } = console;
 
@@ -129,6 +130,15 @@ program
       process.exit(1);
     }
     editpostman(cmd.input, cmd.output);
+  });
+
+program
+  .command('nove')
+  .option('-u, --username [w3id]', 'Specify w3id')
+  .option('-p, --password [password]', 'Specify password')
+  .action((cmd) => {
+    validCommand = true;
+    submitNove(cmd.username, cmd.password);
   });
 
 function displayUsage() {
