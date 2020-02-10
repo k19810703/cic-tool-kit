@@ -32,7 +32,7 @@
     "open": "^6.2.0",
     "osx-quit": "^1.0.0",
     "progress": "^2.0.3",
-    "puppeteer": "^1.20.0",
+    "puppeteer": "^2.0.0",
     "request": "^2.88.0",
     "resemblejs": "^3.1.0",
     "robotjs": "^0.5.1",
